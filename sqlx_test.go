@@ -728,6 +728,16 @@ func TestUsage(t *testing.T) {
 		if jason.FirstName != "Jason" {
 			t.Errorf("Expecting to get back Jason, but got %v\n", jason.FirstName)
 		}
+		
+		jason = Person{}
+		err = db.Get(&jason, db.Rebind("SELECT * FROM person WHERE first_name=$1"), "Jason")
+
+		if err != nil {
+			t.Fatal(err)
+		}
+		if jason.FirstName != "Jason" {
+			t.Errorf("Expecting to get back Jason, but got %v\n", jason.FirstName)
+		}
 
 		err = db.Get(&jason, db.Rebind("SELECT * FROM person WHERE first_name=?"), "Foobar")
 		if err == nil {
